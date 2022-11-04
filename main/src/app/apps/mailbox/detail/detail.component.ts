@@ -71,12 +71,7 @@ export class DetailComponent {
         this.ms.spamList.push(this.ms.selectedMail);
         this.ms.selectedMail = null;
         this.resetCount();
-      } else if (st === 'Trash') {
-        this.ms.selectedMail.mailbox = 'Trash';
-        this.ms.trashList.push(this.ms.selectedMail);
-        this.ms.selectedMail = null;
-        this.resetCount();
-      } else if (st === 'Read') {
+      }  else if (st === 'Read') {
         if (this.ms.selectedMail.seen) {
           this.ms.selectedMail.seen = false;
           this.ms.global();
@@ -111,10 +106,8 @@ export class DetailComponent {
 
   resetCount(): void {
     this.ms.inboxList = this.mailService.getInbox();
-    this.ms.sentList = this.mailService.getSent();
-    this.ms.draftList = this.mailService.getDraft();
-    this.ms.spamList = this.mailService.getSpam();
-    this.ms.trashList = this.mailService.getTrash();
+
+
     this.ms.mailList = this.ms.inboxList;
     this.ms.users = [];
     for (const mail of this.ms.mailList) {

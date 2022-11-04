@@ -46,16 +46,5 @@ export class mailService {
   public getInbox(): Mailbox[] {
     return mailboxList.filter((mail) => mail.mailbox === 'Inbox');
   }
-  public getSent(): Mailbox[] {
-    return mailboxList.filter((mail) => mail.mailbox === 'Sent');
-  }
-  public getDraft(): Mailbox[] {
-    return mailboxList.filter((mail) => mail.mailbox === 'Draft');
-  }
-  public getSpam(): Mailbox[] {
-    return mailboxList.filter((mail) => mail.mailbox === 'Spam');
-  }
-  public getTrash(): Mailbox[] {
-    return mailboxList.filter((mail) => mail.mailbox === 'Trash');
-  }
+
 }
