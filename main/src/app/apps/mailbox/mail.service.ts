@@ -21,7 +21,7 @@ export class mailGlobalVariable {
   public draftList: Mailbox[] = [];
   public spamList: Mailbox[] = [];
   public trashList: Mailbox[] = [];
-
+     
   public isShow = false;
   addClass = true;
   inboxCount = 0;
@@ -33,7 +33,7 @@ export class mailGlobalVariable {
 
   global(): void {
     this.inboxCount = this.inboxList.filter(
-      (inbox) => inbox.mailbox === 'Inbox' && inbox.seen === false,
+      (inbox) => inbox.mailbox === 'Spam' && inbox.seen === false,
     ).length;
     this.spamCount = this.spamList.length;
     this.draftCount = this.draftList.length;

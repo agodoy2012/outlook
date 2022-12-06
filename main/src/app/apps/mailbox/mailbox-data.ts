@@ -92,7 +92,7 @@ export const mailboxList: Mailbox[] = [
       'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.',
     readStatus: false,
     seen: false,
-    mailbox: 'Draft',
+    mailbox: 'Spam',
     filter: [],
     label: ['Work'],
   },

@@ -15,5 +15,10 @@ export class Mailbox {
     public mailbox: string,
     public filter: string[],
     public label: string[],
+
+
+
+
+    
   ) {}
 }

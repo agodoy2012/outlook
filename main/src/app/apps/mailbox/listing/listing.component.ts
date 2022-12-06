@@ -22,6 +22,7 @@ import { Mailbox } from '../mailbox';
 
 import { Router } from '@angular/router';
 import { CorreosService } from '../services/correos.service';
+import { CorreosGT } from '../interfaces/interfaces';
 
 
 
@@ -156,7 +157,12 @@ export class ListingDialogDataExampleDialogComponent {
 
   console.log(this.data.mensaje)
 
+ this.correoservice.inbox()
+ .subscribe(resps=>{
 
+  console.log(resps)
+
+ })
 
 
 
@@ -182,7 +188,9 @@ export class ListingDialogDataExampleDialogComponent {
 
 export class ListingComponent implements OnInit {
 
-
+  correos:CorreosGT[] = [];
+  bodycorreo: boolean = false;
+  uid: string = ""; 
 
   asunto!: string;
 
@@ -213,7 +221,7 @@ export class ListingComponent implements OnInit {
     public ms: mailGlobalVariable,
 
     // tslint:disable-next-line: no-shadowed-variable
-
+    private correoservice: CorreosService,
     public mailService: mailService,
 
     public router: Router,
@@ -242,10 +250,26 @@ export class ListingComponent implements OnInit {
 
   ngOnInit(): void {
 
+
+    
     this.ms.inboxList = this.mailService.getInbox();
 
-   
+    
+    
+   this.correoservice.inbox()
+   .subscribe(resp =>{
+    this.correos = resp; 
+    console.log(this.correos);
+   })
+ 
 
+
+
+
+
+
+
+   
 
 
     this.ms.mailList = this.ms.inboxList;
@@ -276,29 +300,28 @@ export class ListingComponent implements OnInit {
 
 
 
-  mailSelected(mail: Mailbox): void {
-
-    this.ms.selectedMail = null;
-
-    this.ms.selectedMail = mail;
-
-    this.ms.selectedMail.seen = true;
-
-    mail.seen = true;
-
-    this.ms.addClass = true;
-
-    this.ms.selectedUser = getUser(mail.fromId);
+  mailSelected(mail1: CorreosGT): void {
 
 
 
-    this.ms.global();
+     console.log("pruebas del cuerpo del correo"+mail1.subject);
+
+    
+
+    this.uid = mail1.uid?.toString()!;
+   
+    this.bodycorreo =  true;
+    localStorage.setItem('uid',this.uid );// grabar en local token
+
+
+
+   
 
 
 
     if (this.ms.type === 'Bandeja de entrada') {
 
-      this.router.navigate(['apps/mailbox/inbox', mail.MailId]);
+      this.router.navigate(['apps/mailbox/Bandeja de entrada', mail1.subject]);
 
     }
 
@@ -306,17 +329,17 @@ export class ListingComponent implements OnInit {
 
     if (this.ms.type === 'sent') {
 
-      this.router.navigate(['apps/mailbox/sent', mail.MailId]);
+      this.router.navigate(['apps/mailbox/sent', mail1.subject]);
 
     }
-
+ 
 
 
   
 
     if (this.ms.type === 'prueba') {
 
-      this.router.navigate(['apps/mailbox/spam', mail.MailId]);
+      this.router.navigate(['apps/mailbox/spam', mail1.subject]);
 
     }
 
@@ -324,7 +347,7 @@ export class ListingComponent implements OnInit {
 
     if (this.ms.type === 'trash') {
 
-      this.router.navigate(['apps/mailbox/trash', mail.MailId]);
+      this.router.navigate(['apps/mailbox/trash', mail1.subject]);
 
     }
 
@@ -368,9 +391,10 @@ export class ListingComponent implements OnInit {
 
       this.ms.type = 'inbox';
 
-      this.router.navigate(['apps/mailbox/inbox']);
+      this.router.navigate(['apps/mailbox/Bandeja de entrada']);
 
-    } else if (type === 'Sent') {
+    } else if (type === 'Spam') {
+      console.log("entra a spam")
 
       this.ms.mailList = this.ms.sentList;
 
@@ -392,13 +416,13 @@ export class ListingComponent implements OnInit {
 
       this.ms.selectedMail = null;
 
-      this.ms.topLable = 'Sent';
+      this.ms.topLable = 'Spam';
 
       this.mailActiveClass(type);
 
-      this.ms.type = 'sent';
+      this.ms.type = 'spam';
 
-      this.router.navigate(['apps/mailbox/sent']);
+      this.router.navigate(['apps/mailbox/spam']);
 
     } else if (type === 'Draft') {
 

@@ -52,15 +52,7 @@
 
                       <div class="ml-auto">
 
-                          <span *ngIf="mail.name === 'Recibidos'">
-
-              <span class="label label-primary" color="primary" selected>
-
-                {{ ms.inboxCount }}
-
-              </span>
-
-                          </span>
+                  
 
 
 
@@ -104,7 +96,7 @@
 
                   <div *ngFor="
 
-            let mail of ms.mailList | paginate: { itemsPerPage: 6, currentPage: p };
+            let mail of correos | paginate: { itemsPerPage: 10, currentPage: p };
 
             let i = index
 
@@ -120,15 +112,15 @@
 
                                   <div class="d-flex align-items-center">
 
-                                      <h5 class="m-0 font-medium">{{ ms.users[i].name }}</h5>
+                                      <h5 class="m-0 font-medium">{{ mail.from }}</h5>
 
 
-
+ 
                                   </div>
 
                                   <span class="font-14 text-muted text-truncate">
 
-                  {{ mail.Subject | slice: 0:20 }}..
+                  {{ mail.subject | slice: 0:20 }}..
 
                 </span>
  
@@ -146,17 +138,7 @@
 
                           </div>
 
-                          <p>
 
-                              <span class="font-medium" *ngIf="!mail.seen">
-
-                {{ mail.Message | slice: 0:70 }}..
-
-              </span>
-
-                              <span *ngIf="mail.seen"> {{ mail.Message | slice: 0:70 }}.. </span>
-
-                          </p>
 
                       </div>
 
@@ -174,7 +156,7 @@
 
           <div fxFlex.lg="60" fxFlex.gt-lg="70" fxFlex.sm="100" fxFlex="100" class="d-flex align-items-center justify-content-center detail-part" [class.movetodetail]="ms.addClass">
 
-              <div *ngIf="ms.selectedMail === null" class="text-center d-md-none">
+              <div *ngIf="bodycorreo === false" class="text-center d-md-none">
 
                   <img src="../../../../assets/images/logoGestionadora.jpeg" width="45%">
 
@@ -184,9 +166,11 @@
 
               </div>
 
-              <div *ngIf="ms.selectedMail !== null" class="w-100">
+              <div *ngIf="bodycorreo !== false" class="w-100">
 
-                  <app-maildetail></app-maildetail>
+
+
+                  <app-maildetail [mensaje] = "uid"></app-maildetail>
 
               </div>
 
