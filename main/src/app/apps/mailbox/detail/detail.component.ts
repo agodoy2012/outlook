@@ -4,7 +4,7 @@ import { mailGlobalVariable, mailService } from '../mail.service';
 import { Router } from '@angular/router';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { CorreosService } from '../services/correos.service';
-import { CorreosGT } from '../interfaces/interfaces';
+import { BodyGt, CorreosGT, CuerpoGT } from '../interfaces/interfaces';
 
 @Component({
   selector: 'app-maildetail',
@@ -13,8 +13,12 @@ import { CorreosGT } from '../interfaces/interfaces';
 })
 export class DetailComponent implements OnInit {
   // tslint:disable-next-line: no-shadowed-variable
-@Input() mensaje: CorreosGT[] = [] ;
+@Input() mensaje!: string ;
+@Input() fromegt!: string;
+@Input() sujeto!: string;
 
+ 
+ 
 
   constructor(
     public ms: mailGlobalVariable,
@@ -25,14 +29,10 @@ export class DetailComponent implements OnInit {
 
   public config: PerfectScrollbarConfigInterface = {};
 
-  uid = localStorage.getItem('uid');
-  ngOnInit(): void {
-    console.log("log de envios de mensajes"+this.mensaje)
-    this.correoservice.body(this.uid!)
-    .subscribe(resp =>{
-     console.log(resp)
-    })
 
+  ngOnInit(): void {
+   
+    console.log(this.mensaje);
   }
   ngAfterContentInit() {
     console.log("cambios")

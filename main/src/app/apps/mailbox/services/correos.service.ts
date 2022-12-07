@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CorreosGT } from '../interfaces/interfaces';
+import { BodyGt, CorreosGT } from '../interfaces/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +22,8 @@ inbox(){
 }
  
 body(uid: string){
-
-  return this.http.get<CorreosGT[]>(`http://localhost:8080/obtener-correo/${uid}`) 
+  
+  return this.http.get<BodyGt[]>(`http://localhost:8080/obtener-correo/${uid}`) 
 
 }
  

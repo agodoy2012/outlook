@@ -10,3 +10,20 @@ export interface CorreosGT {
 
 }
 
+export interface CuerpoGT {
+    
+    subject?: string,
+    from?: string,
+    uid?: number;
+    body?: string;
+
+
+}
+export interface BodyGt {
+    
+    subject?: string,
+    html?: string,
+   
+
+
+}

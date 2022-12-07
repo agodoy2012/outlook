@@ -22,7 +22,7 @@ import { Mailbox } from '../mailbox';
 
 import { Router } from '@angular/router';
 import { CorreosService } from '../services/correos.service';
-import { CorreosGT } from '../interfaces/interfaces';
+import { BodyGt, CorreosGT, CuerpoGT } from '../interfaces/interfaces';
 
 
 
@@ -137,8 +137,7 @@ export class ListingDialogDataExampleDialogComponent {
     this.correoservice.sendEmail(this.data.destino,this.data.asunto,this.data.mensaje)
     .subscribe(resp=>{
       
-      console.log("envios de correos");
-      console.log(resp)
+     
     this.dialogRef.close()
     Swal.fire({
       position: 'top-end',
@@ -151,16 +150,12 @@ export class ListingDialogDataExampleDialogComponent {
     })
     });
 
-  console.log(this.data.destino)
-
-  console.log(this.data.asunto)
-
-  console.log(this.data.mensaje)
+ 
 
  this.correoservice.inbox()
  .subscribe(resps=>{
 
-  console.log(resps)
+
 
  })
 
@@ -189,8 +184,13 @@ export class ListingDialogDataExampleDialogComponent {
 export class ListingComponent implements OnInit {
 
   correos:CorreosGT[] = [];
+  cuerpobody!:CuerpoGT[];
+  bodygt!: BodyGt[];
+  mensaje!: string; 
+  sujeto!: string;
   bodycorreo: boolean = false;
   uid: string = ""; 
+  fromgt: string = "";
 
   asunto!: string;
 
@@ -259,7 +259,7 @@ export class ListingComponent implements OnInit {
    this.correoservice.inbox()
    .subscribe(resp =>{
     this.correos = resp; 
-    console.log(this.correos);
+   
    })
  
 
@@ -304,13 +304,25 @@ export class ListingComponent implements OnInit {
 
 
 
-     console.log("pruebas del cuerpo del correo"+mail1.subject);
-
+     
+    
     
 
     this.uid = mail1.uid?.toString()!;
+    this.fromgt = mail1.from!;
+    this.cuerpo(this.uid)
    
-    this.bodycorreo =  true;
+   setTimeout(() => {
+    this.bodycorreo = true
+
+   }, 750);
+   
+  
+   
+
+;
+
+   
     localStorage.setItem('uid',this.uid );// grabar en local token
 
 
@@ -357,7 +369,19 @@ export class ListingComponent implements OnInit {
 
   }
 
+  cuerpo(uid: string){
+    this.correoservice.body(this.uid)
+    .subscribe(resp =>{
+    
+      this.bodygt = resp;
+      this.mensaje = this.bodygt[0].html!;
+      this.sujeto = this.bodygt[0].subject!;
+      
+    
+   
+    })
 
+  }
 
   // tslint:disable-next-line: typedef
 
@@ -394,7 +418,7 @@ export class ListingComponent implements OnInit {
       this.router.navigate(['apps/mailbox/Bandeja de entrada']);
 
     } else if (type === 'Spam') {
-      console.log("entra a spam")
+     
 
       this.ms.mailList = this.ms.sentList;
 
@@ -722,7 +746,7 @@ export class ListingComponent implements OnInit {
 
       }
 
-
+ 
 
       this.ms.users = [];
 
