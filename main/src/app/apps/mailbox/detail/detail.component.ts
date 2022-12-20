@@ -16,6 +16,7 @@ export class DetailComponent implements OnInit {
 @Input() mensaje!: string ;
 @Input() fromegt!: string;
 @Input() sujeto!: string;
+@Input() copymail!: string;
 
  
  
@@ -25,17 +26,17 @@ export class DetailComponent implements OnInit {
     public mailService: mailService,
     public router: Router,
     private correoservice: CorreosService
-  ) {}
+  ) {} 
 
   public config: PerfectScrollbarConfigInterface = {};
 
 
   ngOnInit(): void {
    
-    console.log(this.mensaje);
+
   }
   ngAfterContentInit() {
-    console.log("cambios")
+
   }
 
   iconsClick(name: string): void {
@@ -60,7 +61,7 @@ export class DetailComponent implements OnInit {
   }
 
   resetCount(): void {
-  console.log("pruebas")
+
   }
 
   reply(): void {

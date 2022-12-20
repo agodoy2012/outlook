@@ -191,6 +191,7 @@ export class ListingComponent implements OnInit {
   bodycorreo: boolean = false;
   uid: string = ""; 
   fromgt: string = "";
+  copymail!: string;
 
   asunto!: string;
 
@@ -259,7 +260,7 @@ export class ListingComponent implements OnInit {
    this.correoservice.inbox()
    .subscribe(resp =>{
     this.correos = resp; 
-   
+    console.log(resp);
    })
  
 
@@ -307,12 +308,16 @@ export class ListingComponent implements OnInit {
      
     
     
-
+    console.log(mail1+"::::"+mail1.CC)
     this.uid = mail1.uid?.toString()!;
     this.fromgt = mail1.from!;
+    this.copymail = mail1.CC!;
+
+    console.log("imprimir copy mail"+this.copymail)
     this.cuerpo(this.uid)
-   
+    
    setTimeout(() => {
+    
     this.bodycorreo = true
 
    }, 750);

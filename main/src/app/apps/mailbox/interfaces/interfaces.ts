@@ -4,6 +4,7 @@ export interface CorreosGT {
     subject?: string,
     to?: string,
     from?: string,
+    CC?: string,
     date?: string,
     uid?: number;
 
