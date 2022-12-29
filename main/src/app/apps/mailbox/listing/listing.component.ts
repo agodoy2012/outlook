@@ -22,9 +22,10 @@ import { Mailbox } from '../mailbox';
 
 import { Router } from '@angular/router';
 import { CorreosService } from '../services/correos.service';
-import { BodyGt, CorreosGT, CuerpoGT } from '../interfaces/interfaces';
+import { BodyGt, CorreosGT, CuerpoGT, Adjunto, NomAdj, NomAdjEnv } from '../interfaces/interfaces';
 
-
+import { HttpClient } from '@angular/common/http';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 
@@ -95,15 +96,29 @@ export interface DialogData {
       <div fxLayout="row" fxLayoutWrap="wrap">
 
         <!-- column -->
+      
 
-        <div fxFlex.gt-sm="100" fxFlex="100" class="mini-spacer">
+
+        <div fxFlex.gt-sm="50" fxFlex="50" class="mini-spacer">
 
           <button mat-raised-button (click)="onNoClick()"  >ENVIAR</button>
 
          
 
         </div>
-
+        
+        <div fxFlex.gt-sm="50" fxFlex="50" class="mini-spacer" style="text-align: right;">
+        <input type="file" (change)="basicUpload($event.target.files)" name="file" id="file-5" class="inputfile inputfile-5"  multiple />
+       
+        <label for="file-5">
+                                <figure>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="iborrainputfile" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path></svg>
+                                </figure>
+                              
+                                <span class="iborrainputfile">Seleccionar archivo</span>
+                                </label>
+                                
+                            </div>
       </div>
 
     </form>
@@ -113,30 +128,79 @@ export interface DialogData {
 })    
 
 export class ListingDialogDataExampleDialogComponent {
-
-
-
+  fileSelected: any;
+  nameFileToUpload: any;
+  message!: string;
+  show!: boolean;
+  formData: any;
+  nombres!: NomAdjEnv[];
+  nombresdelet!: string;
+  nombreobj: string="";
+  datnomb!: string;
+  obj2!: string;
 
 
   
 
   constructor(
 
-    public dialogRef: MatDialogRef<ListingDialogDataExampleDialogComponent>, private correoservice: CorreosService,
+    public dialogRef: MatDialogRef<ListingDialogDataExampleDialogComponent>, private correoservice: CorreosService,private http: HttpClient,
 
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 
+    pruebasnomb: NomAdj[] = [{"filename":'',"path":''}];
+    validate(files: any): void {
+      this.fileSelected = files;
+     
 
+    }
+  validateExtension(extension: any) {
+    throw new Error('Method not implemented.');
+  }
+      
 
+  basicUpload(files: File[]){
+    
+    //this.correoservice.updad(files,'nombre').subscribe(resp=>{
+      var formData = new FormData();
+     
+      Array.from(files).forEach(f => formData.append('file', f))
+   
+      console.log(formData)
+    this.correoservice.updad(formData,'nombre').subscribe(resp=>{
+        this.nombres = resp;
+        
+       for(let sum = 0; sum < this.nombres.length;){
 
-
+        if(sum<1)
+        {
+          this.nombreobj = this.nombres[sum].path!;
+        }
+        else{
+          this.nombreobj = this.nombreobj+"/"+this.nombres[sum].path;
+        }
+        sum++;
+       }
+     
+        
+ 
+    })
+  
+ 
+    
+  }
   onNoClick(): void {
+    
+    //this.pruebasnomb =[{filename: "poel2.jpeg",path: "./poel2.jpeg"},{filename: "2993E67D-E966-4793-97CD-3E3FA40DF8F5.pdf",path: "./2993E67D-E966-4793-97CD-3E3FA40DF8F5.pdf"}];
 
-
-
-    this.correoservice.sendEmail(this.data.destino,this.data.asunto,this.data.mensaje)
+    this.correoservice.sendEmail(this.data.destino,this.data.asunto,this.data.mensaje,this.nombres)
     .subscribe(resp=>{
       
+   
+    this.correoservice.updadelet(this.nombreobj).subscribe(resp=>{
+
+    })
+   
      
     this.dialogRef.close()
     Swal.fire({
@@ -186,6 +250,9 @@ export class ListingComponent implements OnInit {
   correos:CorreosGT[] = [];
   cuerpobody!:CuerpoGT[];
   bodygt!: BodyGt[];
+  adjuntos!: Adjunto[];
+  adjunto!: string;
+  datagt!: string;
   mensaje!: string; 
   sujeto!: string;
   bodycorreo: boolean = false;
@@ -260,7 +327,7 @@ export class ListingComponent implements OnInit {
    this.correoservice.inbox()
    .subscribe(resp =>{
     this.correos = resp; 
-    console.log(resp);
+    
    })
  
 
@@ -308,19 +375,19 @@ export class ListingComponent implements OnInit {
      
     
     
-    console.log(mail1+"::::"+mail1.CC)
+    
     this.uid = mail1.uid?.toString()!;
     this.fromgt = mail1.from!;
     this.copymail = mail1.CC!;
 
-    console.log("imprimir copy mail"+this.copymail)
+   
     this.cuerpo(this.uid)
     
-   setTimeout(() => {
+   
     
     this.bodycorreo = true
 
-   }, 750);
+  
    
   
    
@@ -374,17 +441,20 @@ export class ListingComponent implements OnInit {
 
   }
 
-  cuerpo(uid: string){
-    this.correoservice.body(this.uid)
+   cuerpo(uid: string){
+
+ 
+  this.correoservice.body(this.uid)
     .subscribe(resp =>{
     
       this.bodygt = resp;
-      this.mensaje = this.bodygt[0].html!;
+      this.mensaje = this.bodygt[0].html?.toString()!;
       this.sujeto = this.bodygt[0].subject!;
       
     
-   
+    
     })
+  
 
   }
 
@@ -993,3 +1063,4 @@ export class ListingComponent implements OnInit {
 
 }
 
+ 

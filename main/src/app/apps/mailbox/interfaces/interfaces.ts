@@ -28,3 +28,16 @@ export interface BodyGt {
 
 
 }
+export interface Adjunto{
+    filename?: string;
+    data?: string;
+}
+export interface NomAdj{
+    filename?: string;
+    path?: string;
+}
+export interface NomAdjEnv{
+    filename?: string;
+    path?: string;
+}
+
